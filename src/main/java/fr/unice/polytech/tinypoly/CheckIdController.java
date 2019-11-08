@@ -1,11 +1,12 @@
 package fr.unice.polytech.tinypoly;
 
+import fr.unice.polytech.tinypoly.dao.AccountDao;
+import fr.unice.polytech.tinypoly.dao.DatastoreDao;
 import fr.unice.polytech.tinypoly.entities.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -14,7 +15,7 @@ public class CheckIdController {
 
     private static final Logger logger = LoggerFactory.getLogger(CheckIdController.class);
 
-    private List<Account> accounts = new ArrayList<>();
+    private AccountDao dao = new DatastoreDao();
 
     /**
      * Checks if account with the given ID exists
@@ -25,16 +26,11 @@ public class CheckIdController {
     @GetMapping(path = "/account/{id}")
     public String validateAccount(@PathVariable long id) {
         try {
-            boolean exists = false;
-            for (Account a : accounts)
-                if (a.getId() == id) {
-                    exists = true;
-                    break;
-                }
-            logger.info("> Asked CheckID with id : " + id);
-            logger.info("Account with id " + id + (exists ? "exists" : "doesn't exist"));
+            List<Account> accounts = dao.listAccounts(null);
+            logger.info("> Asked if Account with id : " + id + " exists");
+            boolean exists = accounts.stream().anyMatch(account -> account.getId() == id);
+            logger.info("Account with id " + id + (exists ? " exists" : " doesn't exist"));
             return exists ? "OK" : "ERROR";
-
         } catch (Exception e) {
             return "FAILED";
         }
@@ -49,8 +45,9 @@ public class CheckIdController {
     @PostMapping(path = "/register/{id}")
     public String registerAccount(@PathVariable long id) {
         try {
+            logger.info("> Trying to create Account with id "+ id);
             if (validateAccount(id).equals("ERROR")) {
-                accounts.add(new Account(id));
+                dao.createAccount(new Account(id, "aa@gmail.com"));
                 return "OK";
             }
             return "ERROR";
