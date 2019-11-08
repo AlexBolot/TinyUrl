@@ -6,9 +6,14 @@ import java.util.Objects;
 public class Account {
 
     private long id;
+    private String email;
 
     public Account(long id) {
         this.id = id;
+    }
+
+    public Account(String email) {
+        this.email = email;
     }
 
     public long getId() {
