@@ -1,4 +1,4 @@
-package com.example.demo;
+package fr.unice.polytech.tinypoly;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
