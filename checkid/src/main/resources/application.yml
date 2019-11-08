@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DATASOURCE_HOST}:5432/tinyurl
+    username: tinyurl
+    password: tinyurl
+  batch:
+    initialize-schema: always
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
