@@ -25,5 +25,6 @@ public class AdministrationController {
     public String createAccount(@RequestBody String body) {
         Account newAccount;
         newAccount = new Account(body);
+        return "";
     }
 }
