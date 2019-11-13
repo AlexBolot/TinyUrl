@@ -2,12 +2,13 @@ package fr.unice.polytech.tinypoly;
 
 import fr.unice.polytech.tinypoly.dao.AccountDao;
 import fr.unice.polytech.tinypoly.dao.DatastoreDao;
-import fr.unice.polytech.tinypoly.entities.Account;
+import fr.unice.polytech.tinypoly.dto.HttpReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/checkid", produces = "application/json")
@@ -24,35 +25,18 @@ public class CheckIdController {
      * @return OK if exists, ERROR if doesn't exist, FAIL in case of internal exception
      */
     @GetMapping(path = "/account/{id}")
-    public String validateAccount(@PathVariable long id) {
+    public HttpReply validateAccount(@PathVariable long id) {
         try {
-            List<Account> accounts = dao.listAccounts(null);
             logger.info("> Asked if Account with id : " + id + " exists");
-            boolean exists = accounts.stream().anyMatch(account -> account.getId() == id);
-            logger.info("Account with id " + id + (exists ? " exists" : " doesn't exist"));
-            return exists ? "OK" : "ERROR";
-        } catch (Exception e) {
-            return "FAILED";
-        }
-    }
+            boolean hasAccount = dao.hasAccount(id);
+            String message = "Account with id " + id + (hasAccount ? " exists" : " doesn't exist");
+            String status = hasAccount ? "OK" : "ERROR";
+            logger.info("> " + message);
 
-    /**
-     * Checks if account with the given ID exists
-     *
-     * @param id Identifier of the Account
-     * @return OK if exists, ERROR if doesn't exist, FAIL in case of internal exception
-     */
-    @PostMapping(path = "/register/{id}")
-    public String registerAccount(@PathVariable long id) {
-        try {
-            logger.info("> Trying to create Account with id "+ id);
-            if (validateAccount(id).equals("ERROR")) {
-                dao.createAccount(new Account(id, "aa@gmail.com"));
-                return "OK";
-            }
-            return "ERROR";
+            return new HttpReply(status, message);
         } catch (Exception e) {
-            return "FAILED";
+            e.printStackTrace();
+            return new HttpReply("FAILED", e.getMessage());
         }
     }
 }

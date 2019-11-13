@@ -41,12 +41,19 @@ public class DatastoreDao implements AccountDao {
         }
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind("Account")
-                .setLimit(10)
+                .setLimit(1000)
                 .setStartCursor(startCursor)
                 .setOrderBy(StructuredQuery.OrderBy.asc("id"))
                 .build();
         QueryResults<Entity> resultList = datastore.run(query);
         return entitiesToAccount(resultList);
+    }
+
+    @Override
+    public boolean hasAccount(long accountId) {
+        return listAccounts(null)
+                .stream()
+                .anyMatch(account -> account.getId() == accountId);
     }
 
     private List<Account> entitiesToAccount(QueryResults<Entity> entities) {

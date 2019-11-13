@@ -11,4 +11,6 @@ public interface AccountDao {
     Account readAccount(long accountId);
 
     List<Account> listAccounts(String startCursorString);
+
+    boolean hasAccount(long accountId);
 }

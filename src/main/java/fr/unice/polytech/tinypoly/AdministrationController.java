@@ -1,5 +1,8 @@
 package fr.unice.polytech.tinypoly;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.polytech.tinypoly.dao.DatastoreDao;
+import fr.unice.polytech.tinypoly.dto.HttpReply;
 import fr.unice.polytech.tinypoly.entities.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdministrationController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdministrationController.class);
+    private DatastoreDao dao = new DatastoreDao();
 
     @GetMapping("/")
     public String hello() {
@@ -21,10 +25,21 @@ public class AdministrationController {
         return "liste des logs pour " + id;
     }
 
-    @PostMapping("/accounts")
-    public String createAccount(@RequestBody String body) {
-        Account newAccount;
-        newAccount = new Account(body);
-        return "";
+    @PostMapping("/account")
+    public HttpReply createAccount(@RequestBody String body) {
+        try {
+            Account account = new ObjectMapper().readValue(body, Account.class);
+            logger.info("> Trying to create Account with id " + account.getId());
+
+            if (dao.hasAccount(account.getId()))
+                return new HttpReply("ERROR", "Account with id " + account.getId() + " already exists");
+
+            dao.createAccount(account);
+
+            return new HttpReply("OK", "Created account " + account);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HttpReply("FAILED", e.getMessage());
+        }
     }
 }
