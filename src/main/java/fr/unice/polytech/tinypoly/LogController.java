@@ -7,14 +7,15 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import fr.unice.polytech.tinypoly.dto.HttpReply;
 import fr.unice.polytech.tinypoly.entities.LogEntry;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +25,21 @@ import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.SUCCESS;
 
 @RestController
 @RequestMapping(path = "/logs", produces = "application/json")
-public class LogController {
+@WebServlet(
+        name = "TaskPull",
+        description = "TaskQueues: Process some queues",
+        urlPatterns = "/taskqueues/queue"
+)
+public class LogController extends HttpServlet {
+
+    @PostConstruct
+    private void postConstruct() throws IOException {
+        File directory = new File(this.getClass().getClassLoader().getResource(".").getFile() + "/logs");
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+    }
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -34,7 +49,14 @@ public class LogController {
             LogEntry logEntry = mapper.readValue(body, LogEntry.class);
             String jsonEntry = mapper.writeValueAsString(logEntry);
 
-            File file = new ClassPathResource("logs.txt").getFile();
+            System.out.println("logs/" + logEntry.getPtitu() + ".txt");
+
+            File file = new File(this.getClass().getClassLoader().getResource("./logs").getFile() + "/" + logEntry.getPtitu() + ".txt");
+            if (file.createNewFile()) {
+                System.out.println("File is created!");
+            } else {
+                System.out.println("File already exists.");
+            }
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(file.getAbsoluteFile(), true));
             bw.write(jsonEntry);
@@ -51,10 +73,7 @@ public class LogController {
     @GetMapping("/accessByPtitu/{ptitu}")
     public HttpReply getLogsById(@PathVariable String ptitu) {
         try {
-            long count = readLogs().stream()
-                    .filter(entry -> entry.getPtitu().equals(ptitu))
-                    .count();
-
+            long count = readLogs(ptitu).size();
             return new HttpReply(SUCCESS, Long.toString(count));
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,10 +81,10 @@ public class LogController {
         }
     }
 
-    private List<LogEntry> readLogs() throws IOException {
-        String fileName = new ClassPathResource("logs.txt").getFile().getCanonicalPath();
+    private List<LogEntry> readLogs(String ptitu) throws IOException {
+        File file = new File(this.getClass().getClassLoader().getResource("./logs").getFile() + "/" + ptitu + ".txt");
 
-        List<String> lines = Files.readAllLines(Paths.get(fileName));
+        List<String> lines = Files.readAllLines(file.toPath());
         List<LogEntry> entries = new ArrayList<>();
 
         for (String line : lines) {
@@ -75,6 +94,7 @@ public class LogController {
         return entries;
     }
 
+    @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int leaseAmount = 1;
         int leaseTime = 3600;
@@ -98,10 +118,7 @@ public class LogController {
             String ptitu = jsonNode.get("ptitu").asText();
 
             try {
-                long count = readLogs()
-                        .stream()
-                        .filter(entry -> entry.getPtitu().equals(ptitu))
-                        .count();
+                long count = readLogs(ptitu).size();
 
                 queue.deleteTask(task);
 
