@@ -10,6 +10,12 @@ import lombok.With;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HttpReply {
-    private String status;
+    private Status status;
     private String message;
+
+    public enum Status {
+        SUCCESS,
+        FAIL,
+        ERROR
+    }
 }

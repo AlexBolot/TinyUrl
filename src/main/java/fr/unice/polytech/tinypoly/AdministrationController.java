@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
+import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.*;
+
 @RestController
 @RequestMapping(path = "/administration", produces = "application/json")
 public class AdministrationController {
@@ -32,14 +34,14 @@ public class AdministrationController {
             logger.info("> Trying to create Account with id " + account.getId());
 
             if (dao.hasAccount(account.getId()))
-                return new HttpReply("ERROR", "Account with id " + account.getId() + " already exists");
+                return new HttpReply(ERROR, "Account with id " + account.getId() + " already exists");
 
             dao.createAccount(account);
 
-            return new HttpReply("OK", "Created account " + account);
+            return new HttpReply(SUCCESS, "Created account " + account);
         } catch (Exception e) {
             e.printStackTrace();
-            return new HttpReply("FAILED", e.getMessage());
+            return new HttpReply(FAIL, e.getMessage());
         }
     }
 }

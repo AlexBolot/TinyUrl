@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.FAIL;
+import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.SUCCESS;
+
 @RestController
 @RequestMapping(path = "/checkid", produces = "application/json")
 public class CheckIdController {
@@ -30,13 +33,10 @@ public class CheckIdController {
             logger.info("> Asked if Account with id : " + id + " exists");
             boolean hasAccount = dao.hasAccount(id);
             String message = "Account with id " + id + (hasAccount ? " exists" : " doesn't exist");
-            String status = hasAccount ? "OK" : "ERROR";
-            logger.info("> " + message);
-
-            return new HttpReply(status, message);
+            return new HttpReply(SUCCESS, message);
         } catch (Exception e) {
             e.printStackTrace();
-            return new HttpReply("FAILED", e.getMessage());
+            return new HttpReply(FAIL, e.getMessage());
         }
     }
 }
