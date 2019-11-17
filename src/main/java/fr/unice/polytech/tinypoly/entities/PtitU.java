@@ -17,8 +17,6 @@ public class PtitU {
 
     private String url;
 
-    private String ptitu;
-
     private String email;
 
 }

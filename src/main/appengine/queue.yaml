@@ -1,0 +1,6 @@
+queue:
+  - name: generate-logs
+    mode: pull
+
+  - name: queue-delete-image
+    rate: 1/s

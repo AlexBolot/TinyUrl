@@ -1,9 +1,6 @@
 package fr.unice.polytech.tinypoly.controller;
 
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.Work;
-import fr.unice.polytech.tinypoly.dao.DatastoreDao;
 import fr.unice.polytech.tinypoly.dto.PtitURequest;
 import fr.unice.polytech.tinypoly.entities.PtitU;
 import org.slf4j.Logger;
@@ -19,10 +16,6 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 public class RedirectionController {
 
     private static final Logger logger = LoggerFactory.getLogger(RedirectionController.class);
-
-    public RedirectionController() {
-
-    }
 
     @GetMapping("/{hash}")
     public RedirectView redirect(@PathVariable long hash, RedirectAttributes attributes) {
@@ -41,7 +34,7 @@ public class RedirectionController {
     public String createPtitU(@RequestHeader(name = "Host") final String host, @RequestBody PtitURequest request) {
         long hash = request.getUrl().hashCode();
         String shortUrl = host + "/ptitu/" + hash;
-        PtitU ptitU = new PtitU(hash, request.getUrl(), shortUrl, request.getEmail());
+        PtitU ptitU = new PtitU(hash, request.getUrl(), request.getEmail());
 
         try {
             ObjectifyService.run(() -> {

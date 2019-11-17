@@ -2,7 +2,6 @@ package fr.unice.polytech.tinypoly.entities;
 
 
 import fr.unice.polytech.tinypoly.dto.HttpReply;
-import fr.unice.polytech.tinypoly.dto.PtitURequest.RequestType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LogEntry {
     private String ptitu;
-    private RequestType type;
     private String author;
     private String accessIP;
     private long timestamp;

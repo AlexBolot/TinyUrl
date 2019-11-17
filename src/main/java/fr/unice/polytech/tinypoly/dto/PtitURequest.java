@@ -13,11 +13,4 @@ public class PtitURequest {
 
     private String url;
 
-    private RequestType type;
-
-    public enum RequestType {
-        IMAGE,
-        PTITU
-    }
-
 }
