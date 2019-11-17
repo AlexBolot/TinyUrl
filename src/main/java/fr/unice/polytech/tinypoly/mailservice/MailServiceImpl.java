@@ -1,5 +1,9 @@
 package fr.unice.polytech.tinypoly.mailservice;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -8,9 +12,12 @@ import java.util.Properties;
 
 public class MailServiceImpl implements MailService{
 
+    @Autowired(required = false)
+    private JavaMailSender javaMailSender;
     private String username = "tinyHuet@gmail.com";
     private String password = "pimamhgxphaborrr";
     private Session session;
+
 
     public MailServiceImpl(){
         Properties props = new Properties();
@@ -35,5 +42,23 @@ public class MailServiceImpl implements MailService{
         msg.setText(message);
         Transport.send(msg);
         return "Your email have been sent";
+    }
+
+    public String sendEmailTest() {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo("hugo.croenne@gmail.com");
+        msg.setSubject("Testing from Spring Boot");
+        msg.setText("Hello World \n Spring Boot Email");
+        javaMailSender.send(msg);
+        return "Mail sent";
+    }
+
+    public String sendEmail(String dest, String sub, String message) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(dest);
+        msg.setSubject(sub);
+        msg.setText(message);
+        javaMailSender.send(msg);
+        return "Mail sent";
     }
 }
