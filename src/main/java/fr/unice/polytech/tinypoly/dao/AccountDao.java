@@ -13,4 +13,6 @@ public interface AccountDao {
     List<Account> listAccounts(String startCursorString);
 
     boolean hasAccount(long accountId);
+
+    long getLastId();
 }

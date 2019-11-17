@@ -56,6 +56,12 @@ public class DatastoreDao implements AccountDao {
                 .anyMatch(account -> account.getId() == accountId);
     }
 
+    @Override
+    public long getLastId() {
+        int size = listAccounts(null).size();
+        return listAccounts(null).get(size - 1).getId();
+    }
+
     private List<Account> entitiesToAccount(QueryResults<Entity> entities) {
         List<Account> resultAccounts = new ArrayList<>();
         entities.forEachRemaining(entity -> resultAccounts.add(entityToAccount(entity)));

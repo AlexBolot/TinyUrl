@@ -3,12 +3,15 @@ package fr.unice.polytech.tinypoly.controller;
 import fr.unice.polytech.tinypoly.dao.AccountDao;
 import fr.unice.polytech.tinypoly.dao.DatastoreDao;
 import fr.unice.polytech.tinypoly.dto.HttpReply;
+import fr.unice.polytech.tinypoly.entities.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.FAIL;
 import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.SUCCESS;
@@ -34,6 +37,18 @@ public class CheckIdController {
             boolean hasAccount = dao.hasAccount(id);
             String message = "Account with id " + id + (hasAccount ? " exists" : " doesn't exist");
             return new HttpReply(SUCCESS, message);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HttpReply(FAIL, e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "/account/all")
+    public HttpReply getAllAccounts() {
+        try {
+            logger.info("> Asked all accounts");
+            List<Account> accounts = dao.listAccounts(null);
+            return new HttpReply(SUCCESS, accounts.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return new HttpReply(FAIL, e.getMessage());
