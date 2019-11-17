@@ -10,3 +10,6 @@
 ## Deploy
 - Enter : `mvn clean package appengine:deploy`
 - To test ether enter : `gcloud app browse` or go to [https://tinypoly-257609.appspot.com/](https://tinypoly-257609.appspot.com/)
+
+## Data Store
+- Enter : `gcloud auth application-default login` and login with your google cloud account

@@ -1,6 +1,7 @@
-package fr.unice.polytech.tinypoly.mailservice;
+package fr.unice.polytech.tinypoly.controller;
 
 import fr.unice.polytech.tinypoly.dto.MailRequest;
+import fr.unice.polytech.tinypoly.mailservice.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

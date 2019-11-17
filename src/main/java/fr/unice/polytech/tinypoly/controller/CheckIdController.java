@@ -1,4 +1,4 @@
-package fr.unice.polytech.tinypoly;
+package fr.unice.polytech.tinypoly.controller;
 
 import fr.unice.polytech.tinypoly.dao.AccountDao;
 import fr.unice.polytech.tinypoly.dao.DatastoreDao;

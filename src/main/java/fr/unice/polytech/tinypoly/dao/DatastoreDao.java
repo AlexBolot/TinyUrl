@@ -3,23 +3,26 @@ package fr.unice.polytech.tinypoly.dao;
 
 import com.google.cloud.datastore.*;
 import fr.unice.polytech.tinypoly.entities.Account;
+import fr.unice.polytech.tinypoly.entities.PtitU;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatastoreDao implements AccountDao {
+public class DatastoreDao implements AccountDao, PtitUDao {
 
     private Datastore datastore;
-    private KeyFactory keyFactory;
+    private KeyFactory accountKeyFactory;
+    private KeyFactory ptituKeyFactory;
 
     public DatastoreDao() {
         datastore = DatastoreOptions.getDefaultInstance().getService();
-        keyFactory = datastore.newKeyFactory().setKind("Account");
+        accountKeyFactory = datastore.newKeyFactory().setKind("Account");
+        ptituKeyFactory = datastore.newKeyFactory().setKind("PtitU");
     }
 
     @Override
     public long createAccount(Account account) {
-        IncompleteKey key = keyFactory.newKey();
+        IncompleteKey key = accountKeyFactory.newKey();
         FullEntity<IncompleteKey> incAccountEntity = Entity.newBuilder(key)
                 .set("email", account.getEmail())
                 .set("id", account.getId())
@@ -30,7 +33,7 @@ public class DatastoreDao implements AccountDao {
 
     @Override
     public Account readAccount(long accountId) {
-        return entityToAccount(datastore.get(keyFactory.newKey(accountId)));
+        return entityToAccount(datastore.get(accountKeyFactory.newKey(accountId)));
     }
 
     @Override
@@ -65,4 +68,52 @@ public class DatastoreDao implements AccountDao {
     private Account entityToAccount(Entity entity) {
         return new Account(entity.getLong("id"), entity.getString("email"));
     }
+
+    @Override
+    public long createPtitU(PtitU ptitU) {
+        IncompleteKey key = ptituKeyFactory.newKey();
+        FullEntity<IncompleteKey> incPtituEntity = Entity.newBuilder(key)
+                .set("hash", ptitU.getHash())
+                .set("url", ptitU.getUrl())
+                .set("ptitu", ptitU.getPtitu())
+                .set("email", ptitU.getEmail())
+                .build();
+        Entity ptituEntity = datastore.add(incPtituEntity);
+        return ptituEntity.getKey().getId();
+    }
+
+    @Override
+    public PtitU readPtitU(long ptituId) {
+        return entityToPtitU(datastore.get(ptituKeyFactory.newKey(ptituId)));
+    }
+
+    @Override
+    public List<PtitU> listPtitUs(String startCursorString) {
+        Cursor startCursor = null;
+        if (startCursorString != null && !startCursorString.equals("")) {
+            startCursor = Cursor.fromUrlSafe(startCursorString);
+        }
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("PtitU")
+                .setLimit(10)
+                .setStartCursor(startCursor)
+                .setOrderBy(StructuredQuery.OrderBy.asc("id"))
+                .build();
+        QueryResults<Entity> resultList = datastore.run(query);
+        return entitiesToPtitU(resultList);
+    }
+
+    private List<PtitU> entitiesToPtitU(QueryResults<Entity> entities) {
+        List<PtitU> resultPtitUs = new ArrayList<>();
+        entities.forEachRemaining(entity -> resultPtitUs.add(entityToPtitU(entity)));
+        return resultPtitUs;
+    }
+
+    private PtitU entityToPtitU(Entity entity) {
+        return new PtitU(entity.getLong("id"),
+                entity.getString("url"),
+                entity.getString("ptitu"),
+                entity.getString("email"));
+    }
+
 }

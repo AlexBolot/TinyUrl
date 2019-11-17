@@ -1,6 +1,7 @@
-package fr.unice.polytech.tinypoly;
+package fr.unice.polytech.tinypoly.config;
 
 //import fr.unice.polytech.tinypoly.mailservice.MailServiceImpl;
+import com.google.cloud.storage.Storage;
 import fr.unice.polytech.tinypoly.mailservice.MailServiceImpl;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
