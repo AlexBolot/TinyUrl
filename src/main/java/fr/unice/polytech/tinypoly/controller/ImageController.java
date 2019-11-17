@@ -29,8 +29,7 @@ public class ImageController {
     }
 
     @GetMapping(value = "/{hash}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody
-    byte[] getImage(@PathVariable long hash) {
+    public @ResponseBody byte[] getImage(@PathVariable long hash) {
         Blob blob = bucket.get(String.valueOf(hash));
 
         logger.info("Get image");

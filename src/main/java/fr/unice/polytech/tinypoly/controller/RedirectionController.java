@@ -1,5 +1,8 @@
 package fr.unice.polytech.tinypoly.controller;
 
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Work;
 import fr.unice.polytech.tinypoly.dao.DatastoreDao;
 import fr.unice.polytech.tinypoly.dto.PtitURequest;
 import fr.unice.polytech.tinypoly.entities.PtitU;
@@ -9,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @RestController
 @RequestMapping(value = "/ptitu", produces = "application/json")
@@ -18,14 +20,14 @@ public class RedirectionController {
 
     private static final Logger logger = LoggerFactory.getLogger(RedirectionController.class);
 
-    private DatastoreDao dao = new DatastoreDao();
+    public RedirectionController() {
 
-    private List<PtitU> ptituList = new ArrayList<>();
+    }
 
     @GetMapping("/{hash}")
     public RedirectView redirect(@PathVariable long hash, RedirectAttributes attributes) {
         try {
-            PtitU ptitU = dao.readPtitU(hash);
+            PtitU ptitU = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
             attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectView");
             attributes.addAttribute("attribute", "redirectWithRedirectView");
             return new RedirectView(ptitU.getUrl());
@@ -36,19 +38,18 @@ public class RedirectionController {
     }
 
     @PostMapping("/create")
-    public String createPtitU(@RequestHeader(name="Host") final String host, @RequestBody PtitURequest request) {
+    public String createPtitU(@RequestHeader(name = "Host") final String host, @RequestBody PtitURequest request) {
         long hash = request.getUrl().hashCode();
         String shortUrl = host + "/ptitu/" + hash;
-        PtitU ptitU = new PtitU(request.getUrl(), shortUrl, request.getEmail());
+        PtitU ptitU = new PtitU(hash, request.getUrl(), shortUrl, request.getEmail());
 
         try {
-            logger.info("> Trying to create Account with id " + hash);
-            PtitU p = dao.readPtitU(hash);
-            if (!p.equals(ptitU)) {
-                dao.createPtitU(ptitU);
-                return shortUrl;
-            }
-            return "ERROR";
+            ObjectifyService.run(() -> {
+                ofy().save().entities(ptitU).now();
+                return ptitU;
+            });
+            logger.info("PtitU created");
+            return shortUrl;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return "FAILED";

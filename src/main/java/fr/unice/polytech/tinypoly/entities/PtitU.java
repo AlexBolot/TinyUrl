@@ -1,5 +1,7 @@
 package fr.unice.polytech.tinypoly.entities;
 
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 import lombok.*;
 
 @Data
@@ -7,8 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Entity
 public class PtitU {
 
+    @Id
     private long hash;
 
     private String url;
@@ -16,11 +20,5 @@ public class PtitU {
     private String ptitu;
 
     private String email;
-
-    public PtitU(String url, String ptitu, String email) {
-        this.url = url;
-        this.ptitu = ptitu;
-        this.email = email;
-    }
 
 }
