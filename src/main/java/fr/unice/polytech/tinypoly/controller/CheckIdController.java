@@ -42,16 +42,4 @@ public class CheckIdController {
             return new HttpReply(FAIL, e.getMessage());
         }
     }
-
-    @GetMapping(path = "/account/all")
-    public HttpReply getAllAccounts() {
-        try {
-            logger.info("> Asked all accounts");
-            List<Account> accounts = dao.listAccounts(null);
-            return new HttpReply(SUCCESS, accounts.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new HttpReply(FAIL, e.getMessage());
-        }
-    }
 }

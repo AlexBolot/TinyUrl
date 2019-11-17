@@ -19,4 +19,9 @@ public class PtitU {
 
     private String email;
 
+    private long compteur;
+
+    public void addCompteur() {
+        compteur++;
+    }
 }

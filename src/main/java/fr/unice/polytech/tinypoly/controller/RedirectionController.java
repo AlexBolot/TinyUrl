@@ -21,8 +21,12 @@ public class RedirectionController {
     public RedirectView redirect(@PathVariable long hash, RedirectAttributes attributes) {
         try {
             PtitU ptitU = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
+            ptitU.addCompteur();
             attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectView");
             attributes.addAttribute("attribute", "redirectWithRedirectView");
+            //TODO : update petit u
+            // TODO : dans admin controlleur voir liste
+            //  ObjectifyService.run(() -> ofy().save().
             return new RedirectView(ptitU.getUrl());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -34,7 +38,7 @@ public class RedirectionController {
     public String createPtitU(@RequestHeader(name = "Host") final String host, @RequestBody PtitURequest request) {
         long hash = request.getUrl().hashCode();
         String shortUrl = host + "/ptitu/" + hash;
-        PtitU ptitU = new PtitU(hash, request.getUrl(), request.getEmail());
+        PtitU ptitU = new PtitU(hash, request.getUrl(), request.getEmail(), 0);
 
         try {
             ObjectifyService.run(() -> {
