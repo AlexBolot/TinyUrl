@@ -1,30 +1,123 @@
 {
-	"info": {
-		"_postman_id": "c1b48f85-91c1-4820-8693-ec84de89951c",
-		"name": "SACC",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "localhost:8081/logs/accessByPtitu/BFGX8",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8081/logs/accessByPtitu/BFGX8",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"logs",
-						"accessByPtitu",
-						"BFGX8"
-					]
-				}
-			},
-			"response": []
-		}
-	],
-	"protocolProfileBehavior": {}
+  "info": {
+    "_postman_id": "c09d1ded-883b-4454-9bd9-70cb1bf844b8",
+    "name": "SACC",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Application Healthcheck",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8081/healthcheck",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "healthcheck"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Check if account exists",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8081/checkid/account/0",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "checkid",
+            "account",
+            "0"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create a new account",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"bolotalex06@gmail.com\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8081/administration/account",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "administration",
+            "account"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Check again if account exists",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8081/checkid/account/0",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "checkid",
+            "account",
+            "0"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "localhost:8081/logs/accessByPtitu/BFGX8",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8081/logs/accessByPtitu/BFGX8",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "logs",
+            "accessByPtitu",
+            "BFGX8"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
 }
