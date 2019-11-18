@@ -61,9 +61,10 @@ public class AdministrationController {
 
     @GetMapping("account/ptitu/details/{hash}")
     public String getPtitUById(@PathVariable String hash) {
-        List<PtitU> u = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("hash", hash).list());
-        PtitU ofHash = u.get(0);
-        mailService.sendEmail(ofHash.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
+        System.out.println("----" + hash);
+        PtitU u = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
+        System.out.println(u.getEmail());
+        mailService.sendEmail(u.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
         return "OK <3";
     }
 

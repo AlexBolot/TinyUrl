@@ -16,10 +16,10 @@ emulatorPort=8082
 server=http://${host}:${serverPort}
 
 newAccount="{\"email\":\"bolotalex06@gmail.com\"}"
-logEntry1="{\"ptitu\":\"A4DX8\",\"author\":\"bolotalex06@gmail.com\",\"accessIP\":\"51.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
-logEntry2="{\"ptitu\":\"BFGX8\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"12.34.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
-logEntry3="{\"ptitu\":\"BFGX8\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"21.91.110.78\",\"timestamp\":\"1573656704\",\"status\":\"SUCCESS\"}"
-logEntry4="{\"ptitu\":\"D4OWX\",\"author\":\"hugo.croenne@gmail.com\",\"accessIP\":\"89.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
+logEntry1="{\"ptitu\":\"A4DX8\",\"type\":\"PTITU\",\"author\":\"bolotalex06@gmail.com\",\"accessIP\":\"51.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
+logEntry2="{\"ptitu\":\"BFGX8\",\"type\":\"IMAGE\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"12.34.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
+logEntry3="{\"ptitu\":\"BFGX8\",\"type\":\"IMAGE\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"21.91.110.78\",\"timestamp\":\"1573656704\",\"status\":\"SUCCESS\"}"
+logEntry4="{\"ptitu\":\"D4OWX\",\"type\":\"PTITU\",\"author\":\"hugo.croenne@gmail.com\",\"accessIP\":\"89.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
 
 ## ------------------------------------------------------
 
@@ -27,23 +27,23 @@ export DATASTORE_EMULATOR_HOST=${host}:${emulatorPort}
 export DATASTORE_PROJECT_ID=${project_id}
 export DATASTORE_USE_PROJECT_ID_AS_APP_ID=true
 
-printf "\n-- Starting emularor (no store on disk, port %s) - (should take 6 seconds) --\n" "${emulatorPort}"
-gcloud beta emulators datastore start --no-store-on-disk --host-port=${host}:${emulatorPort} > /dev/null 2>&1 &
+#printf "\n-- Starting emularor (no store on disk, port %s) - (should take 6 seconds) --\n" "${emulatorPort}"
+#gcloud beta emulators datastore start --no-store-on-disk --host-port=${host}:${emulatorPort} > /dev/null 2>&1 &
+#pids+=($!)
+
+#sleep 6
+#printf "   - Done -"
+
+
+printf "\n-- Starting Springboot App at %s (should take 18 seconds) --\n" ${server}
+mvn clean spring-boot:run &#> /dev/null &
 pids+=($!)
 
-sleep 6
+sleep 18
 printf "   - Done -"
 
-
-printf "\n-- Starting Springboot App at %s (should take 30 seconds) --\n" ${server}
-mvn spring-boot:run &#> /dev/null &
-pids+=($!)
-
-sleep 30
-printf "   - Done -"
-
-printf "\n-- Ping server for healthcheck --\n"
-curl -X GET -H "Content-type: application/json" ${server}/healthcheck
+#printf "\n-- Ping server for healthcheck --\n"
+#curl -X GET -H "Content-type: application/json" ${server}/healthcheck
 #printf "\n-- Does account with ID 0 exists ? --\n"
 #curl -X GET -H "Content-type: application/json" ${server}/checkid/account/0
 #printf "\n-- Creating a new Account --\n"
@@ -66,9 +66,6 @@ curl -X GET -H "Content-type: application/json" ${server}/logs/accessByPtitu/A4D
 printf "\n-- There should be 2 logs for ptitu BFGX8 --\n"
 curl -X GET -H "Content-type: application/json" ${server}/logs/accessByPtitu/BFGX8
 echo
-echo
-echo
-curl -X GET -H "Content-type: application/json" ${server}/administration/account/ptitu/details/BFGX8
 
 printf "\n\n-- Tearing down emulator and Springboot application --\n\n"
 

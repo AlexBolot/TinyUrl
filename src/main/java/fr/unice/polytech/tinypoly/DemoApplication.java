@@ -1,7 +1,5 @@
 package fr.unice.polytech.tinypoly;
 
-import com.google.cloud.datastore.DatastoreOptions;
-import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import fr.unice.polytech.tinypoly.entities.PtitU;
 import org.springframework.boot.SpringApplication;

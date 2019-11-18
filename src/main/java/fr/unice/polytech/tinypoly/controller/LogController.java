@@ -40,22 +40,16 @@ public class LogController {
         }
     }
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
     @PostMapping("/add")
     public HttpReply addLogs(@RequestBody String body) {
         try {
+            ObjectMapper mapper = new ObjectMapper();
             LogEntry logEntry = mapper.readValue(body, LogEntry.class);
             String jsonEntry = mapper.writeValueAsString(logEntry);
 
-            logger.info("logs/" + logEntry.getPtitu() + ".txt");
-
             File file = new File(this.getClass().getClassLoader().getResource("./logs").getFile() + "/" + logEntry.getPtitu() + ".txt");
-            if (file.createNewFile()) {
-                logger.info("File is created!");
-            } else {
-                logger.info("File already exists.");
-            }
+
+            if (file.createNewFile()) logger.info("Created file " + file.getPath());
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(file.getAbsoluteFile(), true));
             bw.write(jsonEntry);
@@ -72,9 +66,9 @@ public class LogController {
     @GetMapping("/accessByPtitu/{ptitu}")
     public HttpReply getLogsById(@PathVariable String ptitu) {
         try {
-            long count = readLogs(ptitu).size();
+            List<LogEntry> entries = readLogs(ptitu);
             logger.info("Logs get for ptitU" + ptitu);
-            return new HttpReply(SUCCESS, Long.toString(count));
+            return new HttpReply(SUCCESS, new ObjectMapper().writeValueAsString(entries));
         } catch (Exception e) {
             logger.error("Error while getting logs", e);
             return new HttpReply(FAIL, e.getMessage());
@@ -83,6 +77,7 @@ public class LogController {
 
     private List<LogEntry> readLogs(String ptitu) throws IOException {
         File file = new File(this.getClass().getClassLoader().getResource("./logs").getFile() + "/" + ptitu + ".txt");
+        ObjectMapper mapper = new ObjectMapper();
 
         List<String> lines = Files.readAllLines(file.toPath());
         List<LogEntry> entries = new ArrayList<>();

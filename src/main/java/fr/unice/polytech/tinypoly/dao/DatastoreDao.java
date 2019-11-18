@@ -59,7 +59,7 @@ public class DatastoreDao implements AccountDao {
     @Override
     public long getLastId() {
         int size = listAccounts(null).size();
-        return listAccounts(null).get(size - 1).getId();
+        return size == 0 ? 0 : listAccounts(null).get(size - 1).getId();
     }
 
     private List<Account> entitiesToAccount(QueryResults<Entity> entities) {
