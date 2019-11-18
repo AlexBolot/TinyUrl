@@ -15,12 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.*;
@@ -68,9 +64,9 @@ public class AdministrationController {
 
     @GetMapping("account/ptitu/details/{hash}")
     public String getPtitUById(@PathVariable String hash) {
-        List<PtitU> u = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("hash", hash).list());
-        PtitU ofHash = u.get(0);
-        mailService.sendEmail(ofHash.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
+        System.out.println("----" + hash);
+        PtitU u = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
+        mailService.sendEmail(u.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
         return "OK <3";
     }
 

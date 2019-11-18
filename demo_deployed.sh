@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-server=tinypoly-257609.appspot.com
+server=https://tinypoly-257609.appspot.com/
 newAccount="{\"email\":\"bolotalex06@gmail.com\"}"
 
 ## ------------------------------------------------------
