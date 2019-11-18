@@ -1,0 +1,30 @@
+{
+	"info": {
+		"_postman_id": "c1b48f85-91c1-4820-8693-ec84de89951c",
+		"name": "SACC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8081/logs/accessByPtitu/BFGX8",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/logs/accessByPtitu/BFGX8",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"logs",
+						"accessByPtitu",
+						"BFGX8"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
