@@ -1,7 +1,6 @@
-package fr.unice.polytech.tinypoly;
+package fr.unice.polytech.tinypoly.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.unice.polytech.tinypoly.controller.RedirectionController;
 import fr.unice.polytech.tinypoly.dto.HttpReply;
 import fr.unice.polytech.tinypoly.entities.LogEntry;
 import org.slf4j.Logger;

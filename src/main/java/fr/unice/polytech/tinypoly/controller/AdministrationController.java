@@ -1,9 +1,6 @@
 package fr.unice.polytech.tinypoly.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.ObjectifyService;
 import fr.unice.polytech.tinypoly.dao.DatastoreDao;
 import fr.unice.polytech.tinypoly.dto.HttpReply;
@@ -15,12 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.*;
@@ -50,9 +43,9 @@ public class AdministrationController {
 
     @GetMapping("/logs/{id}")
     public String getLogsById(@PathVariable String id) {
-        Queue q = QueueFactory.getQueue("generate-logs");
-        q.add(
-                TaskOptions.Builder.withMethod(TaskOptions.Method.PULL).payload(id.toString()));
+//        Queue q = QueueFactory.getQueue("generate-logs");
+//        q.add(
+//                TaskOptions.Builder.withMethod(TaskOptions.Method.PULL).payload(id.toString()));
         return "liste des logs pour " + id;
     }
 
