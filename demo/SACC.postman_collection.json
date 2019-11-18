@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "c09d1ded-883b-4454-9bd9-70cb1bf844b8",
-    "name": "SACC",
+    "_postman_id": "2dfa7da5-96a6-4801-8ecb-aef6c88d45c0",
+    "name": "Tinypoly",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -11,11 +11,13 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "localhost:8081/healthcheck",
+          "raw": "https://tinypoly-257609.appspot.com/healthcheck",
+          "protocol": "https",
           "host": [
-            "localhost"
+            "tinypoly-257609",
+            "appspot",
+            "com"
           ],
-          "port": "8081",
           "path": [
             "healthcheck"
           ]
@@ -24,27 +26,59 @@
       "response": []
     },
     {
-      "name": "Check if account exists",
+      "name": "Create Account",
       "request": {
-        "method": "GET",
+        "method": "POST",
         "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"bolotalex06@gmail.com\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
         "url": {
-          "raw": "localhost:8081/checkid/account/0",
+          "raw": "https://tinypoly-257609.appspot.com/administration/account",
+          "protocol": "https",
           "host": [
-            "localhost"
+            "tinypoly-257609",
+            "appspot",
+            "com"
           ],
-          "port": "8081",
           "path": [
-            "checkid",
-            "account",
-            "0"
+            "administration",
+            "account"
           ]
         }
       },
       "response": []
     },
     {
-      "name": "Create a new account",
+      "name": "Get Account",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://tinypoly-257609.appspot.com/checkid/account/1",
+          "protocol": "https",
+          "host": [
+            "tinypoly-257609",
+            "appspot",
+            "com"
+          ],
+          "path": [
+            "checkid",
+            "account",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create PtitU",
       "request": {
         "method": "POST",
         "header": [
@@ -57,7 +91,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\"email\":\"bolotalex06@gmail.com\"}",
+          "raw": "{\n\t\"email\": \"bolotalex06@gmail.com\",\n\t\"url\": \"https://docs.google.com/document/d/19eZfZCg1QvGqS8ES7UnuQBSEV4sICB24Wl_MCnJHqUw/edit#\",\n\t\"type\": \"PTITU\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -65,54 +99,158 @@
           }
         },
         "url": {
-          "raw": "localhost:8081/administration/account",
+          "raw": "https://tinypoly-257609.appspot.com/ptitu/create",
+          "protocol": "https",
           "host": [
-            "localhost"
+            "tinypoly-257609",
+            "appspot",
+            "com"
           ],
-          "port": "8081",
           "path": [
-            "administration",
-            "account"
+            "ptitu",
+            "create"
           ]
         }
       },
       "response": []
     },
     {
-      "name": "Check again if account exists",
+      "name": "Get PtitU",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "localhost:8081/checkid/account/0",
+          "raw": "https://tinypoly-257609.appspot.com/ptitu/1725396150",
+          "protocol": "https",
           "host": [
-            "localhost"
+            "tinypoly-257609",
+            "appspot",
+            "com"
           ],
-          "port": "8081",
           "path": [
-            "checkid",
-            "account",
-            "0"
+            "ptitu",
+            "1725396150"
           ]
         }
       },
       "response": []
     },
     {
-      "name": "localhost:8081/logs/accessByPtitu/BFGX8",
+      "name": "Create Image",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "File",
+              "type": "file",
+              "src": "https://lpe.starwars-holonet.com/wp-content/uploads/2018/08/hello-1040x428.jpg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://tinypoly-257609.appspot.com/image/create",
+          "protocol": "https",
+          "host": [
+            "tinypoly-257609",
+            "appspot",
+            "com"
+          ],
+          "path": [
+            "image",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Log",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\t\"ptitu\":\"1725396150\",\r\n\t\"author\":\"bolotalex06@gmail.com\",\r\n\t\"accessIP\":\"12.34.110.78\",\r\n\t\"timestamp\":\"1573672204\",\r\n\t\"status\":\"SUCCESS\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://tinypoly-257609.appspot.com/logs/add",
+          "protocol": "https",
+          "host": [
+            "tinypoly-257609",
+            "appspot",
+            "com"
+          ],
+          "path": [
+            "logs",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Log",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "localhost:8081/logs/accessByPtitu/BFGX8",
+          "raw": "https://tinypoly-257609.appspot.com/logs/accessByPtitu/1725396150",
+          "protocol": "https",
           "host": [
-            "localhost"
+            "tinypoly-257609",
+            "appspot",
+            "com"
           ],
-          "port": "8081",
           "path": [
             "logs",
             "accessByPtitu",
-            "BFGX8"
+            "1725396150"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Log from admin",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://tinypoly-257609.appspot.com/administration/account/ptitu/details/1725396150",
+          "protocol": "https",
+          "host": [
+            "tinypoly-257609",
+            "appspot",
+            "com"
+          ],
+          "path": [
+            "administration",
+            "account",
+            "ptitu",
+            "details",
+            "1725396150"
           ]
         }
       },

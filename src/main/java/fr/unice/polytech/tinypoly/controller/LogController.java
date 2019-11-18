@@ -25,7 +25,7 @@ public class LogController {
     private static final Logger logger = LoggerFactory.getLogger(LogController.class);
 
     public LogController() {
-        try {
+        /*try {
             File directory = new File(this.getClass().getClassLoader().getResource(".").getFile() + "/logs");
 
             if (!directory.exists()) {
@@ -37,7 +37,7 @@ public class LogController {
             }
         } catch (Exception e) {
             logger.error("Error while creating LogController", e);
-        }
+        }*/
     }
 
     @PostMapping("/add")
@@ -47,7 +47,7 @@ public class LogController {
             LogEntry logEntry = mapper.readValue(body, LogEntry.class);
             String jsonEntry = mapper.writeValueAsString(logEntry);
 
-            File file = new File(this.getClass().getClassLoader().getResource("./logs").getFile() + "/" + logEntry.getPtitu() + ".txt");
+            File file = new File("/tmp/" + logEntry.getPtitu() + ".txt");
 
             if (file.createNewFile()) logger.info("Created file " + file.getPath());
 
@@ -76,7 +76,7 @@ public class LogController {
     }
 
     private List<LogEntry> readLogs(String ptitu) throws IOException {
-        File file = new File(this.getClass().getClassLoader().getResource("./logs").getFile() + "/" + ptitu + ".txt");
+        File file = new File("/tmp/" + ptitu + ".txt");
         ObjectMapper mapper = new ObjectMapper();
 
         List<String> lines = Files.readAllLines(file.toPath());

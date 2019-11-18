@@ -55,7 +55,7 @@ public class AdministrationController {
         List<PtitU> ptitUS = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email ==", email).list());
         String listPtitU = "";
         for (PtitU u : ptitUS) {
-            listPtitU += u.getHash() + " => " + u.getUrl() + " used " + u.getCompteur() + "time" + ((u.getCompteur() > 1) ? "s" : "") + "\n";
+            listPtitU += String.format("%d => %s used %dtime%s\n", u.getHash(), u.getUrl(), u.getCompteur(), (u.getCompteur() > 1) ? "s" : "");
         }
         return listPtitU;
     }
@@ -68,7 +68,6 @@ public class AdministrationController {
         mailService.sendEmail(ptitU.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
         return "OK <3";
     }
-
 
     @PostMapping("/account")
     public HttpReply createAccount(@RequestBody String body) {
