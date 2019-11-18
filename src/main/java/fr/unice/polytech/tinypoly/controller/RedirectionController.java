@@ -24,9 +24,7 @@ public class RedirectionController {
             ptitU.addCompteur();
             attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectView");
             attributes.addAttribute("attribute", "redirectWithRedirectView");
-            //TODO : update petit u
-            // TODO : dans admin controlleur voir liste
-            //  ObjectifyService.run(() -> ofy().save().
+            ofy().save().entity(ptitU).now();
             return new RedirectView(ptitU.getUrl());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

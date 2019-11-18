@@ -34,10 +34,9 @@ public class AdministrationController {
 
     /**
      * Utilisateur enregistré :
-     * Obtenir la liste de ses propres contenus (ptit-u -> contenu) avec le nombre de requêtes reçues : en cours
      * Obtenir le détail de tous les accès pour une de ses ptit-u
      * Administrateur :
-     * Lister tous les contenus : 
+     * Lister tous les contenus :
      * Obtenir le détail de n'importe quel contenu
      */
 
@@ -60,7 +59,19 @@ public class AdministrationController {
     @GetMapping("account/ptitu/")
     public String getPtitUByMail(@RequestBody String email) {
         List<PtitU> ptitUS = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email", email).list());
-        return ptitUS.toString();
+        String listPtitU = "";
+        for (PtitU u : ptitUS) {
+            listPtitU += u.getHash() + " => " + u.getUrl() + " used " + u.getCompteur() + "time" + ((u.getCompteur() > 1) ? "s" : "") + "\n";
+        }
+        return listPtitU;
+    }
+
+    @GetMapping("account/ptitu/details/{hash}")
+    public String getPtitUById(@PathVariable String hash) {
+        List<PtitU> u = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("hash", hash).list());
+        PtitU ofHash = u.get(0);
+        mailService.sendEmail(ofHash.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
+        return "OK <3";
     }
 
 
