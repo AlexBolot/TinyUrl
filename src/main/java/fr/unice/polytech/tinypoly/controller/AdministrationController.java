@@ -23,6 +23,7 @@ import static fr.unice.polytech.tinypoly.dto.HttpReply.Status.*;
 public class AdministrationController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdministrationController.class);
+
     private DatastoreDao dao = new DatastoreDao();
 
     /**
@@ -51,7 +52,7 @@ public class AdministrationController {
 
     @GetMapping("/account/ptitu/")
     public String getPtitUByMail(@RequestBody String email) {
-        List<PtitU> ptitUS = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email", email).list());
+        List<PtitU> ptitUS = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email ==", email).list());
         String listPtitU = "";
         for (PtitU u : ptitUS) {
             listPtitU += u.getHash() + " => " + u.getUrl() + " used " + u.getCompteur() + "time" + ((u.getCompteur() > 1) ? "s" : "") + "\n";

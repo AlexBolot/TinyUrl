@@ -2,6 +2,7 @@ package fr.unice.polytech.tinypoly.entities;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import lombok.*;
 
 @Data
@@ -17,6 +18,7 @@ public class PtitU {
 
     private String url;
 
+    @Index
     private String email;
 
     private long compteur;
