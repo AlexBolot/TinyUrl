@@ -14,5 +14,7 @@ public interface AccountDao {
 
     boolean hasAccount(long accountId);
 
+    boolean hasAccount(String email);
+
     long getLastId();
 }

@@ -1,6 +1,9 @@
 package fr.unice.polytech.tinypoly.entities;
 
 
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,14 +11,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Account {
 
-    private long id;
-    private String email;
+    @Id
+    private Long id = null;
 
-    public Account(long id) {
-        this.id = id;
-    }
+    @Index
+    private String email;
 
     public Account(String email) {
         this.email = email;

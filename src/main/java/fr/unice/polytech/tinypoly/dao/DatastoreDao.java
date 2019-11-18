@@ -57,6 +57,13 @@ public class DatastoreDao implements AccountDao {
     }
 
     @Override
+    public boolean hasAccount(String email) {
+        return listAccounts(null)
+                .stream()
+                .anyMatch(account -> account.getEmail() == email);
+    }
+
+    @Override
     public long getLastId() {
         int size = listAccounts(null).size();
         return size == 0 ? 0 : listAccounts(null).get(size - 1).getId();

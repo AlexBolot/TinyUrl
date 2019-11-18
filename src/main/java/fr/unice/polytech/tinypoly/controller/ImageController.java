@@ -45,10 +45,11 @@ public class ImageController {
 
     @GetMapping(value = "/{hash}", produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody byte[] getImage(@PathVariable long hash) {
+        logger.info("Get image");
+
         Blob blob = bucket.get(String.valueOf(hash));
 
-        logger.info("Get image");
-        if(blob != null){
+        if (blob != null) {
             return blob.getContent();
         } else {
             throw new ResponseStatusException(NOT_FOUND, "The picture you're looking for doesn't exist or have been removed.");
@@ -63,10 +64,8 @@ public class ImageController {
         else logger.warn("Image not deleted");
     }
 
-    @PostMapping(value = "/create",
-            consumes = "multipart/form-data")
-    public String createImage(@RequestHeader(name = "Host") final String host,
-                              @RequestParam(value = "File") MultipartFile image) throws IOException {
+    @PostMapping(value = "/create", consumes = "multipart/form-data")
+    public String createImage(@RequestHeader(name = "Host") final String host, @RequestParam(value = "File") MultipartFile image) throws IOException {
 
         if (image.getSize() > 4000000) {
             return "Image too big, maximum size of 4Mb, request image size : " + image.getSize();
