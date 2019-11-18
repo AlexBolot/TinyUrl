@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -19,6 +20,7 @@ import java.time.Clock;
 import java.time.Instant;
 
 import static com.google.cloud.tasks.v2.HttpMethod.POST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("/image")
@@ -46,7 +48,11 @@ public class ImageController {
         Blob blob = bucket.get(String.valueOf(hash));
 
         logger.info("Get image");
-        return blob.getContent();
+        if(blob != null){
+            return blob.getContent();
+        } else {
+            throw new ResponseStatusException(NOT_FOUND, "The picture you're looking for doesn't exist or have been removed.");
+        }
     }
 
     @PostMapping(value = "/delete")
