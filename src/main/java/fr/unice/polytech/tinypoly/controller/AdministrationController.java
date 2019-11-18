@@ -60,12 +60,12 @@ public class AdministrationController {
         return listPtitU;
     }
 
-    @GetMapping("account/ptitu/details/{hash}")
-    public String getPtitUById(@PathVariable String hash) {
+    @GetMapping("/account/ptitu/details/{hash}")
+    public String getPtitUById(@PathVariable long hash) {
         System.out.println("----" + hash);
-        PtitU u = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
-        System.out.println(u.getEmail());
-        mailService.sendEmail(u.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
+        PtitU ptitU = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
+        System.out.println(ptitU.getEmail());
+        mailService.sendEmail(ptitU.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
         return "OK <3";
     }
 

@@ -24,7 +24,7 @@ public class RedirectionController {
             ptitU.addCompteur();
             attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectView");
             attributes.addAttribute("attribute", "redirectWithRedirectView");
-            ofy().save().entity(ptitU).now();
+            ObjectifyService.run(() -> ofy().save().entity(ptitU).now());
             return new RedirectView(ptitU.getUrl());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
