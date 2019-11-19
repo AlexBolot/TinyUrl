@@ -43,21 +43,21 @@ public class AdministrationController {
         return "liste des logs pour " + id;
     }
 
-    @GetMapping("/account/ptitu/")
+    @GetMapping(value = "/account/ptitu", consumes = MediaType.TEXT_PLAIN_VALUE)
     public String getPtitUByMail(@RequestBody String email) {
         List<PtitU> ptitUS = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email", email).list());
         StringBuilder listPtitU = new StringBuilder();
         for (PtitU u : ptitUS) {
-            listPtitU.append(String.format("%d => %s used %dtime%s%n", u.getHash(), u.getUrl(), u.getCompteur(), (u.getCompteur() > 1) ? "s" : ""));
+            listPtitU.append(String.format("%d => %s used %d time%s%n", u.getHash(), u.getUrl(), u.getCompteur(), (u.getCompteur() > 1) ? "s" : ""));
         }
         return listPtitU.toString();
     }
 
     @GetMapping("/account/ptitu/details/{hash}")
-    public String getPtitUById(@PathVariable long hash, @RequestBody String email) {
-        System.out.println("----" + hash);
-        PtitU ptitU = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email", email).filter("id ==", hash).first().now());
-        System.out.println(ptitU.getEmail());
+    public String getPtitUById(@PathVariable long hash) {
+        logger.info("----" + hash);
+        PtitU ptitU = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
+        logger.info(ptitU.getEmail());
         mailService.sendEmail(ptitU.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
         return "OK <3";
     }

@@ -5,6 +5,7 @@ import fr.unice.polytech.tinypoly.dto.HttpReply;
 import fr.unice.polytech.tinypoly.entities.LogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedWriter;
@@ -25,8 +26,10 @@ public class LogController {
     private static final Logger logger = LoggerFactory.getLogger(LogController.class);
 
     public LogController() {
-        /*try {
-            File directory = new File(this.getClass().getClassLoader().getResource(".").getFile() + "/logs");
+        try {
+//            File directory = new File(this.getClass().getClassLoader().getResource(".").getFile() + "/logs");
+            File directory = ResourceUtils.getFile("file:/tmp/logs");
+//            File directory = ResourceUtils.getFile("file:C:\\tmp\\logs");
 
             if (!directory.exists()) {
                 if (directory.mkdirs()) {
@@ -37,7 +40,7 @@ public class LogController {
             }
         } catch (Exception e) {
             logger.error("Error while creating LogController", e);
-        }*/
+        }
     }
 
     @PostMapping("/add")
@@ -47,11 +50,13 @@ public class LogController {
             LogEntry logEntry = mapper.readValue(body, LogEntry.class);
             String jsonEntry = mapper.writeValueAsString(logEntry);
 
-            File file = new File("/tmp/" + logEntry.getPtitu() + ".txt");
+//            File file = new File("/tmp/" + logEntry.getPtitu() + ".txt");
+            File file = ResourceUtils.getFile("file:/tmp/logs/" + logEntry.getPtitu() + ".txt");
+//            File file = ResourceUtils.getFile("file:C:\\tmp\\logs\\" + logEntry.getPtitu() + ".txt");
 
             if (file.createNewFile()) logger.info("Created file " + file.getPath());
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file.getAbsoluteFile(), true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
             bw.write(jsonEntry);
             bw.write("\n");
             bw.close();
@@ -76,7 +81,9 @@ public class LogController {
     }
 
     private List<LogEntry> readLogs(String ptitu) throws IOException {
-        File file = new File("/tmp/" + ptitu + ".txt");
+//        File file = new File("/tmp/" + ptitu + ".txt");
+        File file = ResourceUtils.getFile("file:/tmp/logs/" + ptitu + ".txt");
+//        File file = ResourceUtils.getFile("file:C:\\tmp\\logs\\" + ptitu + ".txt");
         ObjectMapper mapper = new ObjectMapper();
 
         List<String> lines = Files.readAllLines(file.toPath());

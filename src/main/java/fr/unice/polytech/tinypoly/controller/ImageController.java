@@ -7,26 +7,39 @@ import com.google.cloud.tasks.v2.QueueName;
 import com.google.cloud.tasks.v2.Task;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
+import com.googlecode.objectify.ObjectifyService;
+import fr.unice.polytech.tinypoly.dto.HttpReply;
+import fr.unice.polytech.tinypoly.entities.Image;
+import fr.unice.polytech.tinypoly.entities.LogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.Clock;
 import java.time.Instant;
 
 import static com.google.cloud.tasks.v2.HttpMethod.POST;
+import static com.googlecode.objectify.ObjectifyService.ofy;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequestMapping("/image")
 public class ImageController {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     private Bucket bucket;
 
@@ -44,12 +57,15 @@ public class ImageController {
     }
 
     @GetMapping(value = "/{hash}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getImage(@PathVariable long hash) {
+    public @ResponseBody byte[] getImage(@RequestHeader(name = "Host") final String host, @PathVariable long hash, HttpServletRequest request) {
         logger.info("Get image");
 
         Blob blob = bucket.get(String.valueOf(hash));
 
         if (blob != null) {
+            Image image = ObjectifyService.run(() -> ofy().load().type(Image.class).id(hash).now());
+            LogEntry logEntry = new LogEntry(String.valueOf(hash), image.getEmail(), getClientIp(request), System.currentTimeMillis(), LogEntry.Type.IMAGE);
+            restTemplate.postForObject("http://" + host + "/logs/add", logEntry, Void.class);
             return blob.getContent();
         } else {
             throw new ResponseStatusException(NOT_FOUND, "The picture you're looking for doesn't exist or have been removed.");
@@ -64,11 +80,13 @@ public class ImageController {
         else logger.warn("Image not deleted");
     }
 
-    @PostMapping(value = "/create", consumes = "multipart/form-data")
-    public String createImage(@RequestHeader(name = "Host") final String host, @RequestParam(value = "File") MultipartFile image) throws IOException {
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String createImage(@RequestHeader(name = "Host") final String host, @RequestParam(value = "File") MultipartFile image, @RequestParam(value = "Email") String email) throws IOException {
+        if (restTemplate.postForObject("http://" + host + "/checkid/account", email, HttpReply.class).getStatus() != HttpReply.Status.SUCCESS)
+            throw new ResponseStatusException(UNAUTHORIZED, "You need an account to create short url.");
 
         if (image.getSize() > 4000000) {
-            return "Image too big, maximum size of 4Mb, request image size : " + image.getSize();
+            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "Image too big, maximum size of 4Mb, request image size : " + image.getSize());
         }
 
         long hash = image.hashCode();
@@ -109,8 +127,29 @@ public class ImageController {
             logger.info("Task created: " + task.getName());
         }
 
+        Image entity = new Image(hash, image.getOriginalFilename(), email, 0);
+
+        ObjectifyService.run(() -> {
+            ofy().save().entities(entity).now();
+            return entity;
+        });
+
         logger.info("Image created");
         return url;
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+
+        String remoteAddr = "";
+
+        if (request != null) {
+            remoteAddr = request.getHeader("X-FORWARDED-FOR");
+            if (remoteAddr == null || "".equals(remoteAddr)) {
+                remoteAddr = request.getRemoteAddr();
+            }
+        }
+
+        return remoteAddr;
     }
 
 }

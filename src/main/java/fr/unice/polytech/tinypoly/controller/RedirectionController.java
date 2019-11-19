@@ -3,6 +3,7 @@ package fr.unice.polytech.tinypoly.controller;
 import com.googlecode.objectify.ObjectifyService;
 import fr.unice.polytech.tinypoly.dto.HttpReply;
 import fr.unice.polytech.tinypoly.dto.PtitURequest;
+import fr.unice.polytech.tinypoly.entities.LogEntry;
 import fr.unice.polytech.tinypoly.entities.PtitU;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import static org.springframework.http.HttpStatus.*;
 
@@ -26,9 +29,9 @@ public class RedirectionController {
 
     @Autowired
     private RestTemplate restTemplate;
-
+//localhost:8081/ptitu/1725396150
     @GetMapping("/{hash}")
-    public RedirectView redirect(@PathVariable long hash, RedirectAttributes attributes) {
+    public RedirectView redirect(@RequestHeader(name = "Host") final String host, @PathVariable long hash, RedirectAttributes attributes, HttpServletRequest request) {
         try {
             PtitU ptitU = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
             if (ptitU == null)
@@ -37,6 +40,8 @@ public class RedirectionController {
             attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectView");
             attributes.addAttribute("attribute", "redirectWithRedirectView");
             ObjectifyService.run(() -> ofy().save().entity(ptitU).now());
+            LogEntry logEntry = new LogEntry(String.valueOf(ptitU.getHash()), ptitU.getEmail(), getClientIp(request), System.currentTimeMillis(), LogEntry.Type.PTITU);
+            restTemplate.postForObject("http://" + host + "/logs/add", logEntry, Void.class);
             return new RedirectView(ptitU.getUrl());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -64,5 +69,20 @@ public class RedirectionController {
             logger.error(e.getMessage(), e);
             throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "There was an error while creating the short url.");
         }
+    }
+
+
+    private String getClientIp(HttpServletRequest request) {
+
+        String remoteAddr = "";
+
+        if (request != null) {
+            remoteAddr = request.getHeader("X-FORWARDED-FOR");
+            if (remoteAddr == null || "".equals(remoteAddr)) {
+                remoteAddr = request.getRemoteAddr();
+            }
+        }
+
+        return remoteAddr;
     }
 }

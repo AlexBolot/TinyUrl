@@ -14,13 +14,18 @@ public class LogEntry {
     private String author;
     private String accessIP;
     private long timestamp;
-    private HttpReply.Status status;
+    private Type type;
+
+    public enum Type {
+        IMAGE,
+        PTITU
+    }
 
     @Override
     public String toString() {
         return '{' +
                 "\"ptitu\":\"" + ptitu + "\"," +
-                "\"status\":" + status +
+                "\"type\":" + type +
                 '}';
     }
 }
