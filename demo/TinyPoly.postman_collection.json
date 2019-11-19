@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c8d34686-bfe3-419a-b3e5-93848b1c57e2",
+		"_postman_id": "586272f1-ad3e-4a4d-8b74-858c00d13959",
 		"name": "Tinypoly",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -283,6 +283,27 @@
 						"ptitu",
 						"details",
 						"1725396150"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Drop Databases",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://tinypoly-257609.appspot.com/administration/drop",
+					"protocol": "https",
+					"host": [
+						"tinypoly-257609",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"administration",
+						"drop"
 					]
 				}
 			},
