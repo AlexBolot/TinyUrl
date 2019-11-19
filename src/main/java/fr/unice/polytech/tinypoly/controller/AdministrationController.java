@@ -27,14 +27,6 @@ public class AdministrationController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdministrationController.class);
 
-    /**
-     * Utilisateur enregistré :
-     * Obtenir le détail de tous les accès pour une de ses ptit-u
-     * Administrateur :
-     * Lister tous les contenus :
-     * Obtenir le détail de n'importe quel contenu
-     */
-
     @Autowired
     private MailService mailService;
 
