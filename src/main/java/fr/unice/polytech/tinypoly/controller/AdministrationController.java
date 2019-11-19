@@ -64,15 +64,15 @@ public class AdministrationController {
         String email = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now()).getEmail();
         if (email == null) email = ObjectifyService.run(() -> ofy().load().type(Image.class).id(hash).now()).getEmail();
         logger.info(email);
-        mailService.sendEmail(email, "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
-        return "OK";
+        mailService.sendEmail(email, "Votre détail de logs pour " + hash, "Voici l'url: " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
+        return "You'll receive a mail soon.";
     }
 
-    @GetMapping(value = "/drop")
+    @PostMapping(value = "/drop")
     public String dropStorage() {
         ObjectifyService.run(() -> ofy().delete().type(PtitU.class));
         ObjectifyService.run(() -> ofy().delete().type(Account.class));
-        return "And there was nothing left";
+        return "Databases have been cleared.";
     }
 
     @PostMapping(value = "/account", consumes = MediaType.TEXT_PLAIN_VALUE)

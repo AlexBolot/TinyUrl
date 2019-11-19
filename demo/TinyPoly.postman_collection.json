@@ -291,7 +291,7 @@
 		{
 			"name": "Drop Databases",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"url": {
 					"raw": "https://tinypoly-257609.appspot.com/administration/drop",
