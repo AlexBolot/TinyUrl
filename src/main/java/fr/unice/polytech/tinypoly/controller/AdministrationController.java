@@ -43,8 +43,8 @@ public class AdministrationController {
         return "liste des logs pour " + id;
     }
 
-    @GetMapping(value = "/account/ptitu/{email}", consumes = MediaType.TEXT_PLAIN_VALUE)
-    public String getPtitUByMail(@PathVariable String email) {
+    @PostMapping(value = "/account/ptitu/", consumes = MediaType.TEXT_PLAIN_VALUE)
+    public String getPtitUByMail(@RequestBody String email) {
         List<PtitU> ptitUS = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email", email).list());
         StringBuilder listPtitU = new StringBuilder();
         for (PtitU u : ptitUS) {
@@ -59,7 +59,7 @@ public class AdministrationController {
         PtitU ptitU = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
         logger.info(ptitU.getEmail());
         mailService.sendEmail(ptitU.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
-        return "OK <3";
+        return "OK";
     }
 
     @PostMapping(value = "/account", consumes = MediaType.TEXT_PLAIN_VALUE)
