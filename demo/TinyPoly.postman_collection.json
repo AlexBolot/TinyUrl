@@ -187,12 +187,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/logs/add",
-					"protocol": "http",
+					"raw": "https://tinypoly-257609.appspot.com/logs/add",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"tinypoly-257609",
+						"appspot",
+						"com"
 					],
-					"port": "8081",
 					"path": [
 						"logs",
 						"add"
