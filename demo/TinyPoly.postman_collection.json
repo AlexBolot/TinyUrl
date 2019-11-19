@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "hugo.ojvind.francois@gmail.com",
+					"raw": "fabrice.huet@gmail.com",
 					"options": {
 						"raw": {
 							"language": "text"
@@ -49,7 +49,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "hugo.ojvind.francois@gmail.com",
+					"raw": "fabrice.huet@gmail.com",
 					"options": {
 						"raw": {
 							"language": "text"
@@ -86,7 +86,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"email\": \"hugo.ojvind.francois@gmail.com\",\n\t\"url\": \"https://docs.google.com/document/d/19eZfZCg1QvGqS8ES7UnuQBSEV4sICB24Wl_MCnJHqUw/edit#\"\n}\n",
+					"raw": "{\n\t\"email\": \"fabrice.huet@gmail.com\",\n\t\"url\": \"https://docs.google.com/document/d/19eZfZCg1QvGqS8ES7UnuQBSEV4sICB24Wl_MCnJHqUw/edit#\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -152,7 +152,7 @@
 						},
 						{
 							"key": "Email",
-							"value": "hugo.ojvind.francois@gmail.com",
+							"value": "fabrice.huet@gmail.com",
 							"type": "text"
 						}
 					]
@@ -187,7 +187,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"ptitu\":\"1725396150\",\r\n\t\"author\":\"hugo.ojvind.françois@gmail.com\",\r\n\t\"accessIP\":\"12.34.110.78\",\r\n\t\"timestamp\":\"1573672204\",\r\n\t\"status\":\"SUCCESS\"\r\n}\r\n",
+					"raw": "{\r\n\t\"ptitu\":\"1725396150\",\r\n\t\"author\":\"fabrice.huet@gmail.com\",\r\n\t\"accessIP\":\"12.34.110.78\",\r\n\t\"timestamp\":\"1573672204\",\n\t\"type\":\"URL\"\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -249,7 +249,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "hugo.ojvind.francois@gmail.com",
+					"raw": "fabrice.huet@gmail.com",
 					"options": {
 						"raw": {
 							"language": "text"

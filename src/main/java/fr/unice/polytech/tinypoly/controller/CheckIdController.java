@@ -17,13 +17,13 @@ public class CheckIdController {
 
     private static final Logger logger = LoggerFactory.getLogger(CheckIdController.class);
 
-    /**
-     * Checks if account with the given ID exists
-     *
-     * @param id Identifier of the Account
-     * @return OK if exists, ERROR if doesn't exist, FAIL in case of internal exception
-     */
-    @GetMapping(path = "/account/{id}")
+    //**
+    // * Checks if account with the given ID exists
+    // *
+    // * @param id Identifier of the Account
+    // * @return OK if exists, ERROR if doesn't exist, FAIL in case of internal exception
+    // */
+    /*@GetMapping(path = "/account/{id}")
     public HttpReply validateAccount(@PathVariable long id) {
         try {
             logger.info("> Asked if Account with id : " + id + " exists");
@@ -34,7 +34,7 @@ public class CheckIdController {
             e.printStackTrace();
             return new HttpReply(FAIL, e.getMessage());
         }
-    }
+    }*/
 
     @PostMapping(path = "/account", consumes = MediaType.TEXT_PLAIN_VALUE)
     public HttpReply validateAccount(@RequestBody String email) {

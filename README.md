@@ -32,5 +32,5 @@ We are using one queue for deleting the images with tasks.
 ## Postman Request
 
 - https://tinypoly-257609.appspot.com/image/create 
-Use with email hugo.ojvind.francois@gmail.com if you created an account using the given requests (or any other account) 
+Use with email fabrice.huet@gmail.com if you created an account using the given requests (or any other account) 
 Take any image present on your computer with clearing the value of the file.

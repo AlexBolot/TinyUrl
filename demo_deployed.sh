@@ -2,7 +2,7 @@
 
 
 server=https://tinypoly-257609.appspot.com/
-newAccount="{\"email\":\"bolotalex06@gmail.com\"}"
+newAccount="{\"email\":\"fabrice.huet@gmail.com\"}"
 
 ## ------------------------------------------------------
 

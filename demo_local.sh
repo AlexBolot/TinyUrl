@@ -15,8 +15,8 @@ serverPort=8081
 emulatorPort=8082
 server=http://${host}:${serverPort}
 
-newAccount="{\"email\":\"bolotalex06@gmail.com\"}"
-logEntry1="{\"ptitu\":\"1725396150\",\"author\":\"bolotalex06@gmail.com\",\"accessIP\":\"51.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
+newAccount="{\"email\":\"fabrice.huet@gmail.com\"}"
+logEntry1="{\"ptitu\":\"1725396150\",\"author\":\"fabrice.huet@gmail.com\",\"accessIP\":\"51.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
 logEntry2="{\"ptitu\":\"1725396150\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"12.34.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
 logEntry3="{\"ptitu\":\"1725396150\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"21.91.110.78\",\"timestamp\":\"1573656704\",\"status\":\"SUCCESS\"}"
 logEntry4="{\"ptitu\":\"1725396150\",\"author\":\"hugo.croenne@gmail.com\",\"accessIP\":\"89.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
