@@ -3,6 +3,7 @@ package fr.unice.polytech.tinypoly.controller;
 import com.googlecode.objectify.ObjectifyService;
 import fr.unice.polytech.tinypoly.dto.HttpReply;
 import fr.unice.polytech.tinypoly.entities.Account;
+import fr.unice.polytech.tinypoly.entities.Image;
 import fr.unice.polytech.tinypoly.entities.PtitU;
 import fr.unice.polytech.tinypoly.mailservice.MailService;
 import org.slf4j.Logger;
@@ -43,12 +44,16 @@ public class AdministrationController {
         return "liste des logs pour " + id;
     }
 
-    @PostMapping(value = "/account/ptitu/", consumes = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "/account/ptitu", consumes = MediaType.TEXT_PLAIN_VALUE)
     public String getPtitUByMail(@RequestBody String email) {
         List<PtitU> ptitUS = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email", email).list());
+        List<Image> images = ObjectifyService.run(() -> ofy().load().type(Image.class).filter("email", email).list());
         StringBuilder listPtitU = new StringBuilder();
         for (PtitU u : ptitUS) {
             listPtitU.append(String.format("%d => %s used %d time%s%n", u.getHash(), u.getUrl(), u.getCompteur(), (u.getCompteur() > 1) ? "s" : ""));
+        }
+        for (Image u : images) {
+            listPtitU.append(String.format("%d => %s used %d time%s%n", u.getHash(), u.getName(), u.getCompteur(), (u.getCompteur() > 1) ? "s" : ""));
         }
         return listPtitU.toString();
     }
@@ -56,9 +61,10 @@ public class AdministrationController {
     @GetMapping("/account/ptitu/details/{hash}")
     public String getPtitUById(@PathVariable long hash) {
         logger.info("----" + hash);
-        PtitU ptitU = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now());
-        logger.info(ptitU.getEmail());
-        mailService.sendEmail(ptitU.getEmail(), "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
+        String email = ObjectifyService.run(() -> ofy().load().type(PtitU.class).id(hash).now()).getEmail();
+        if (email == null) email = ObjectifyService.run(() -> ofy().load().type(Image.class).id(hash).now()).getEmail();
+        logger.info(email);
+        mailService.sendEmail(email, "Votre détail de logs pour " + hash, "Voici l'url maintenant débrouille toi : " + "https://tinypoly-257609.appspot.com/logs/accessByPtitu/" + hash);
         return "OK";
     }
 
