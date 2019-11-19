@@ -1,7 +1,6 @@
 package fr.unice.polytech.tinypoly.controller;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import fr.unice.polytech.tinypoly.dto.HttpReply;
 import fr.unice.polytech.tinypoly.entities.Account;
@@ -93,7 +92,7 @@ public class AdministrationController {
         mailService.sendEmail(account.getEmail(), "Votre création de compte", "Votre compte tiny-poly a bien été crée " + account.getEmail() + " ! \n" +
                 "A partir d'aujourd'hui, le " + LocalDateTime.now() + " vous pouvez utiliser votre compte pour upload des contenus <3");
 
-        throw new ResponseStatusException(CREATED, "Account created for email " + email);
+        throw new ResponseStatusException(OK, "Account created for email " + email);
     }
 
     @GetMapping(path = "/account/all", produces = MediaType.APPLICATION_JSON_VALUE)

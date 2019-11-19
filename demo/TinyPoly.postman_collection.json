@@ -45,10 +45,19 @@
 		{
 			"name": "Get Account",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "hugo.ojvind.francois@gmail.com",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
 				"url": {
-					"raw": "https://tinypoly-257609.appspot.com/checkid/account/5705808872472576",
+					"raw": "https://tinypoly-257609.appspot.com/checkid/account/",
 					"protocol": "https",
 					"host": [
 						"tinypoly-257609",
@@ -57,8 +66,7 @@
 					],
 					"path": [
 						"checkid",
-						"account",
-						"5705808872472576"
+						"account"
 					]
 				}
 			},
