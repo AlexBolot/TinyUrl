@@ -1,5 +1,7 @@
 package fr.unice.polytech.tinypoly.controller;
 
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import fr.unice.polytech.tinypoly.dto.HttpReply;
 import fr.unice.polytech.tinypoly.entities.Account;
@@ -70,8 +72,10 @@ public class AdministrationController {
 
     @PostMapping(value = "/drop")
     public String dropStorage() {
-        ObjectifyService.run(() -> ofy().delete().type(PtitU.class));
-        ObjectifyService.run(() -> ofy().delete().type(Account.class));
+        Iterable<Key<PtitU>> allKeys = ObjectifyService.run(() -> ofy().load().type(PtitU.class).keys());
+        ObjectifyService.run(() -> ofy().delete().keys(allKeys));
+        Iterable<Key<Account>> allKeys2 = ObjectifyService.run(() -> ofy().load().type(Account.class).keys());
+        ObjectifyService.run(() -> ofy().delete().keys(allKeys2));
         return "Databases have been cleared.";
     }
 
