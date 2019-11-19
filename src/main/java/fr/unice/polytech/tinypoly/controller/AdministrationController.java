@@ -43,8 +43,8 @@ public class AdministrationController {
         return "liste des logs pour " + id;
     }
 
-    @GetMapping(value = "/account/ptitu", consumes = MediaType.TEXT_PLAIN_VALUE)
-    public String getPtitUByMail(@RequestBody String email) {
+    @GetMapping(value = "/account/ptitu/{email}", consumes = MediaType.TEXT_PLAIN_VALUE)
+    public String getPtitUByMail(@PathVariable String email) {
         List<PtitU> ptitUS = ObjectifyService.run(() -> ofy().load().type(PtitU.class).filter("email", email).list());
         StringBuilder listPtitU = new StringBuilder();
         for (PtitU u : ptitUS) {
