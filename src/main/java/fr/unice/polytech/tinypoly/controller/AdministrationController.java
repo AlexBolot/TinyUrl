@@ -68,6 +68,13 @@ public class AdministrationController {
         return "OK";
     }
 
+    @GetMapping(value = "/drop")
+    public String dropStorage() {
+        ObjectifyService.run(() -> ofy().delete().type(PtitU.class));
+        ObjectifyService.run(() -> ofy().delete().type(Account.class));
+        return "And there was nothing left";
+    }
+
     @PostMapping(value = "/account", consumes = MediaType.TEXT_PLAIN_VALUE)
     public HttpReply createAccount(@RequestBody String email) {
         Account account = new Account(email);
