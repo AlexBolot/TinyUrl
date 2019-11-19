@@ -85,7 +85,7 @@ public class AdministrationController {
         logger.info("Creating Account with email " + account.getEmail());
 
         if (ObjectifyService.run(() -> ofy().load().type(Account.class).filter("email", email).first().now()) != null)
-            throw new ResponseStatusException(CONFLICT, "Account with id " + account.getId() + " already exists.");
+            throw new ResponseStatusException(CONFLICT, "Account with email " + account.getEmail() + " already exists.");
 
         try {
             ObjectifyService.run(() -> {
