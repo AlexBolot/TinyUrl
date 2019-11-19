@@ -22,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.time.Clock;
 import java.time.Instant;
@@ -60,14 +62,16 @@ public class ImageController {
     public @ResponseBody byte[] getImage(@RequestHeader(name = "Host") final String host, @PathVariable long hash, HttpServletRequest request) {
         logger.info("Get image");
 
+        Image image = ObjectifyService.run(() -> ofy().load().type(Image.class).id(hash).now());
         Blob blob = bucket.get(String.valueOf(hash));
 
         if (blob != null) {
-            Image image = ObjectifyService.run(() -> ofy().load().type(Image.class).id(hash).now());
-            LogEntry logEntry = new LogEntry(String.valueOf(hash), image.getEmail(), getClientIp(request), System.currentTimeMillis(), LogEntry.Type.IMAGE);
+            LogEntry logEntry = new LogEntry(String.valueOf(hash), image.getEmail(), getClientIp(request), System.currentTimeMillis(), LogEntry.Type.IMAGE, HttpReply.Status.SUCCESS);
             restTemplate.postForObject("http://" + host + "/logs/add", logEntry, Void.class);
             return blob.getContent();
         } else {
+            LogEntry logEntry = new LogEntry(String.valueOf(hash), image.getEmail(), getClientIp(request), System.currentTimeMillis(), LogEntry.Type.IMAGE, HttpReply.Status.FAIL);
+            restTemplate.postForObject("http://" + host + "/logs/add", logEntry, Void.class);
             throw new ResponseStatusException(NOT_FOUND, "The picture you're looking for doesn't exist or have been removed.");
         }
     }

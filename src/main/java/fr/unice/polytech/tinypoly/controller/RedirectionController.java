@@ -29,7 +29,7 @@ public class RedirectionController {
 
     @Autowired
     private RestTemplate restTemplate;
-//localhost:8081/ptitu/1725396150
+
     @GetMapping("/{hash}")
     public RedirectView redirect(@RequestHeader(name = "Host") final String host, @PathVariable long hash, RedirectAttributes attributes, HttpServletRequest request) {
         try {
@@ -40,7 +40,7 @@ public class RedirectionController {
             attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectView");
             attributes.addAttribute("attribute", "redirectWithRedirectView");
             ObjectifyService.run(() -> ofy().save().entity(ptitU).now());
-            LogEntry logEntry = new LogEntry(String.valueOf(ptitU.getHash()), ptitU.getEmail(), getClientIp(request), System.currentTimeMillis(), LogEntry.Type.PTITU);
+            LogEntry logEntry = new LogEntry(String.valueOf(hash), ptitU.getEmail(), getClientIp(request), System.currentTimeMillis(), LogEntry.Type.IMAGE, HttpReply.Status.SUCCESS);
             restTemplate.postForObject("http://" + host + "/logs/add", logEntry, Void.class);
             return new RedirectView(ptitU.getUrl());
         } catch (Exception e) {
