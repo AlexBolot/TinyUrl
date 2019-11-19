@@ -14,8 +14,23 @@
 - Enter : `gcloud auth application-default login` and login with your google cloud account
 
 ## Test our app !
-- Local test : demo_local.sh
-- Test gcloud : demo_deployed.sh
-
 All our requests can also be tested in postman, you can find them in 
 demo/SACC.postman_collection.json
+
+## Resources GCloud
+
+In this project, we are using AppEngine for the deployment, and CLoud Datastore to store out data. 
+
+The data we store is :
+- Pictures < 4m during 5min (file name, hash, counter, mail creator)
+- Account entity (mail, id)
+- PtitU entity (hash, mail of owner, counter of time called, url)
+- Log file, on file by ptitU
+
+We are using one queue for deleting the images with tasks.
+
+## Postman Request
+
+- https://tinypoly-257609.appspot.com/image/create 
+Use with email hugo.ojvind.francois@gmail.com if you created an account using the given requests (or any other account) 
+Take any image present on your computer with clearing the value of the file.

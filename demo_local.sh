@@ -16,10 +16,10 @@ emulatorPort=8082
 server=http://${host}:${serverPort}
 
 newAccount="{\"email\":\"bolotalex06@gmail.com\"}"
-logEntry1="{\"ptitu\":\"A4DX8\",\"author\":\"bolotalex06@gmail.com\",\"accessIP\":\"51.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
-logEntry2="{\"ptitu\":\"BFGX8\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"12.34.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
-logEntry3="{\"ptitu\":\"BFGX8\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"21.91.110.78\",\"timestamp\":\"1573656704\",\"status\":\"SUCCESS\"}"
-logEntry4="{\"ptitu\":\"D4OWX\",\"author\":\"hugo.croenne@gmail.com\",\"accessIP\":\"89.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
+logEntry1="{\"ptitu\":\"1725396150\",\"author\":\"bolotalex06@gmail.com\",\"accessIP\":\"51.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
+logEntry2="{\"ptitu\":\"1725396150\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"12.34.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
+logEntry3="{\"ptitu\":\"1725396150\",\"author\":\"hugo.ojvind.françois@gmail.com\",\"accessIP\":\"21.91.110.78\",\"timestamp\":\"1573656704\",\"status\":\"SUCCESS\"}"
+logEntry4="{\"ptitu\":\"1725396150\",\"author\":\"hugo.croenne@gmail.com\",\"accessIP\":\"89.91.110.78\",\"timestamp\":\"1573672204\",\"status\":\"SUCCESS\"}"
 
 ## ------------------------------------------------------
 
@@ -61,14 +61,19 @@ curl -X POST -H "Content-type: application/json" ${server}/logs/add -d "${logEnt
 echo
 curl -X POST -H "Content-type: application/json" ${server}/logs/add -d "${logEntry4}"
 echo
-printf "\n-- There should be 1 log for ptitu A4DX8 --\n"
-curl -X GET -H "Content-type: application/json" ${server}/logs/accessByPtitu/A4DX8
-printf "\n-- There should be 2 logs for ptitu BFGX8 --\n"
-curl -X GET -H "Content-type: application/json" ${server}/logs/accessByPtitu/BFGX8
+printf "\n-- There should be 1 log for ptitu 1725396150
+ --\n"
+curl -X GET -H "Content-type: application/json" ${server}/logs/accessByPtitu/1725396150
+
+printf "\n-- There should be 2 logs for ptitu 1725396150
+ --\n"
+curl -X GET -H "Content-type: application/json" ${server}/logs/accessByPtitu/1725396150
+
 echo
 echo
 echo
-curl -X GET -H "Content-type: application/json" ${server}/administration/account/ptitu/details/BFGX8
+curl -X GET -H "Content-type: application/json" ${server}/administration/account/ptitu/details/1725396150
+
 
 printf "\n\n-- Tearing down emulator and Springboot application --\n\n"
 
